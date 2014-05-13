@@ -15,5 +15,6 @@ public class Tag {
 	public static final int DEF = 8;
 	public static final int ARGS = 9;
 	public static final int LOCALS = 10;
+	public static final int FUNCTION = 11;
 	
 }

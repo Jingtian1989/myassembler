@@ -1,6 +1,9 @@
 package org.my.asm.parse;
 
 import org.my.asm.exception.AssemblerMissmatchedException;
+import org.my.asm.exception.AssemblerRedefinitionException;
+import org.my.asm.exception.AssemblerUndefinitionException;
+import org.my.asm.exception.AssemblerUnknowInstructionException;
 import org.my.asm.lex.AssemblerLexer;
 import org.my.asm.lex.Tag;
 import org.my.asm.lex.Token;
@@ -46,12 +49,16 @@ public abstract class AssemblerParser {
 		}
 	}
 
-	public void parse() throws AssemblerMissmatchedException {
+	public void parse() throws AssemblerMissmatchedException,
+			AssemblerRedefinitionException, AssemblerUnknowInstructionException,
+			AssemblerUndefinitionException {
 		init();
 		program();
 	}
 
-	private void program() throws AssemblerMissmatchedException {
+	private void program() throws AssemblerMissmatchedException,
+			AssemblerRedefinitionException, AssemblerUnknowInstructionException,
+			AssemblerUndefinitionException {
 		globals();
 		do {
 			if (lookAhead(1) == Tag.DEF) {
@@ -65,9 +72,9 @@ public abstract class AssemblerParser {
 			} else if (lookAhead(1) == Tag.NEWLINE) {
 				consumeToken();
 			}
-			checkForUnresolvedReferences();
 		} while (lookAhead(1) == Tag.DEF || lookAhead(1) == Tag.ID
 				|| lookAhead(1) == Tag.NEWLINE);
+		checkForUnresolvedReferences();
 	}
 
 	private void globals() throws AssemblerMissmatchedException {
@@ -103,7 +110,8 @@ public abstract class AssemblerParser {
 				Integer.valueOf(localCount.getValue()));
 	}
 
-	private void instruct() throws AssemblerMissmatchedException {
+	private void instruct() throws AssemblerMissmatchedException,
+			AssemblerUnknowInstructionException {
 		Token insr = lookToken(1);
 		match(Tag.ID);
 		// ID NEWLINE
@@ -116,7 +124,7 @@ public abstract class AssemblerParser {
 		Token op1 = operand();
 		if (lookAhead(1) == Tag.NEWLINE) {
 			match(Tag.NEWLINE);
-			generateInstruct(insr.getValue(), op1.getValue());
+			generateInstruct(insr.getValue(), op1);
 			return;
 		}
 		// ID operand, operand NEWLINE
@@ -124,14 +132,13 @@ public abstract class AssemblerParser {
 		Token op2 = operand();
 		if (lookAhead(1) == Tag.NEWLINE) {
 			match(Tag.NEWLINE);
-			generateInstruct(insr.getValue(), op1.getValue(), op2.getValue());
+			generateInstruct(insr.getValue(), op1, op2);
 		}
 		// ID operand, operand, operand NEWLINE
 		match(',');
 		Token op3 = operand();
 		match(Tag.NEWLINE);
-		generateInstruct(insr.getValue(), op1.getValue(), op2.getValue(),
-				op3.getValue());
+		generateInstruct(insr.getValue(), op1, op2, op3);
 
 	}
 
@@ -143,6 +150,7 @@ public abstract class AssemblerParser {
 				match('(');
 				match(')');
 			}
+			ret.setType(Tag.FUNCTION);
 			return ret;
 		} else if (lookAhead(1) == Tag.REG) {
 			consumeToken();
@@ -156,25 +164,30 @@ public abstract class AssemblerParser {
 				+ "but encountered '" + String.valueOf(ret.getType()) + "'");
 	}
 
-	private void label() throws AssemblerMissmatchedException {
+	private void label() throws AssemblerMissmatchedException,
+			AssemblerRedefinitionException {
 		Token label = lookToken(1);
 		match(':');
-		defineLabel(label);
+		defineLabel(label.getValue());
 	}
 
-	public abstract void defineLabel(Token label);
+	public abstract void defineLabel(String label)
+			throws AssemblerRedefinitionException;
 
-	public abstract void generateInstruct(String value, String value2,
-			String value3, String value4);
+	public abstract void generateInstruct(String insrNmae, Token value2,
+			Token value3, Token value4) throws AssemblerUnknowInstructionException;
 
-	public abstract void generateInstruct(String value, String value2,
-			String value3);
+	public abstract void generateInstruct(String insrNmae, Token value2,
+			Token value3) throws AssemblerUnknowInstructionException;
 
-	public abstract void generateInstruct(String value, String value2);
+	public abstract void generateInstruct(String insNmae, Token value2)
+			throws AssemblerUnknowInstructionException;
 
-	public abstract void generateInstruct(String value);
+	public abstract void generateInstruct(String insNmae)
+			throws AssemblerUnknowInstructionException;
 
-	public abstract void checkForUnresolvedReferences();
+	public abstract void checkForUnresolvedReferences()
+			throws AssemblerUndefinitionException;
 
 	public abstract void defineDataSize(int size);
 
