@@ -1,4 +1,4 @@
-package org.my.asm.generate;
+package org.my.asm.bytecode;
 
 public class FunctionSymbol {
 
@@ -57,5 +57,10 @@ public class FunctionSymbol {
 	public boolean equals(Object obj) {
 		return obj instanceof FunctionSymbol
 				&& name.equals(((FunctionSymbol) obj).getName());
+	}
+
+	public String toString() {
+		String desc = "[args=" + argCount + ", locals=" + localCount + "]";
+		return name + "@" + address + desc;
 	}
 }

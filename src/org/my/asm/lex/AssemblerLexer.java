@@ -17,7 +17,7 @@ public class AssemblerLexer {
 	public static int line = 0;
 	public static final Token EOF = new Token(Tag.EOF, "eof");
 	public static final Token NEWLINE = new Token(Tag.NEWLINE, "newline");
-	public static final Token GLOBAL = new Token(Tag.GLOBAL, ".global");
+	public static final Token GLOBALS = new Token(Tag.GLOBAL, ".globals");
 	public static final Token DEF = new Token(Tag.DEF, ".def");
 	public static final Token ARGS = new Token(Tag.ARGS, "args");
 	public static final Token LOCALS = new Token(Tag.LOCALS, "locals");
@@ -25,6 +25,7 @@ public class AssemblerLexer {
 	public AssemblerLexer(String text) {
 		this.text = text;
 		this.size = text.length();
+		init();
 	}
 
 	private void init() {
@@ -72,6 +73,7 @@ public class AssemblerLexer {
 		int i = 0;
 		while (i < str.length()) {
 			match(str.charAt(i));
+			i++;
 		}
 	}
 
@@ -86,7 +88,7 @@ public class AssemblerLexer {
 			if (peek == ';' || peek == '\r' || peek == '\n') {
 				if (peek == ';') {
 					consumeChar();
-					while (peek != '\r' || peek != '\n') {
+					while (peek != '\r' && peek != '\n') {
 						consumeChar();
 					}
 				}
@@ -132,8 +134,8 @@ public class AssemblerLexer {
 					// .def .global
 					if (!isNegative && !isInteger && !isFloat && isLetter(peek)) {
 						if (peek == 'g') {
-							match("global");
-							ret = AssemblerLexer.GLOBAL;
+							match("globals");
+							ret = AssemblerLexer.GLOBALS;
 							return ret;
 						} else if (peek == 'd') {
 							match("def");

@@ -1,4 +1,4 @@
-package org.my.asm.generate;
+package org.my.asm.bytecode;
 
 import java.util.Vector;
 
