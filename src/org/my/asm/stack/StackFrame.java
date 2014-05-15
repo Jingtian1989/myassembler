@@ -15,4 +15,16 @@ public class StackFrame {
 				+ functionSymbol.getLocalCount()];
 	}
 
+	public void addLocal(Object arg, int index) {
+		this.locals[index] = arg;
+	}
+
+	public Object getLocal(int index) {
+		return locals[index];
+	}
+
+	public int getReturnAddres() {
+		return returnAddress;
+	}
+
 }

@@ -181,6 +181,15 @@ public class BytecodeAssembler extends AssemblerParser {
 		bytes[address + 3] = (byte) (value & 0xFF);
 	}
 
+	public static int readInt(byte[] bytes, int address) {
+		int b1 = bytes[address++] & 0xff;
+		int b2 = bytes[address++] & 0xff;
+		int b3 = bytes[address++] & 0xff;
+		int b4 = bytes[address++] & 0xff;
+		int ret = (b1 << (24)) | (b2 << 16) | (b3 << 8) | b4;
+		return ret;
+	}
+
 	public byte[] getMachineCode() {
 		return code;
 	}
