@@ -23,5 +23,4 @@ I rewritten it in my own coding style and implement a stackmachine executing the
 		halt
 
 ####	output
-	1
-	
+	9
