@@ -4,7 +4,7 @@ Assembler is a demonstration in book TPDSL, it's a generic bytecode assembler wh
 I rewritten it in my own coding style and implement a stackmachine executing the bytecode.
 
 
-###	A Program Demo
+###	Demonstration
 
 ####	source code
 	; int x, y	
@@ -21,4 +21,7 @@ I rewritten it in my own coding style and implement a stackmachine executing the
 		gload 1
 		print 
 		halt
+
+####	output
+	1
 	

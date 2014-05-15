@@ -8,6 +8,7 @@ import org.my.asm.exception.AssemblerUndefinitionException;
 import org.my.asm.exception.AssemblerUnknowInstructionException;
 import org.my.asm.lex.AssemblerLexer;
 import org.my.asm.parse.AssemblerParser;
+import org.my.asm.stack.StackInterpreter;
 import org.my.asm.stack.StackMachineDefinition;
 import org.my.asm.test.Util;
 
@@ -19,10 +20,14 @@ public class Test1 {
 				.readFile("\\src\\org\\my\\asm\\test\\stack\\test1.mcode");
 		AssemblerLexer lexer = new AssemblerLexer(text);
 		BytecodeDefinition definition = new StackMachineDefinition();
-		AssemblerParser parser = new BytecodeAssembler(lexer,
+		BytecodeAssembler parser = new BytecodeAssembler(lexer,
 				definition.getBytecodeInstructions());
+		StackInterpreter interpreter = new StackInterpreter();
 		try {
 			parser.parse();
+			interpreter.execute(parser.getMachineCode(),
+					parser.getCodeMemorySize(), parser.getConstantPool(),
+					parser.getMainFunction(), parser.getDataSize());
 		} catch (AssemblerMissmatchedException | AssemblerRedefinitionException
 				| AssemblerUnknowInstructionException
 				| AssemblerUndefinitionException e) {

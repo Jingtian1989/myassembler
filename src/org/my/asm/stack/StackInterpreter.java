@@ -21,15 +21,18 @@ public class StackInterpreter {
 	private FunctionSymbol mainFunction;
 	private boolean trace = false;
 
-	public StackInterpreter(BytecodeAssembler assember) {
-		this.code = assember.getMachineCode();
-		this.codeSize = assember.getCodeMemorySize();
-		this.constPool = assember.getConstantPool();
-		this.mainFunction = assember.getMainFunction();
-		this.globals = new Object[assember.getDataSize()];
+	public StackInterpreter() {
 	}
 
-	public void execute() throws AssemblerUnknowInstructionException {
+	public void execute(byte[] code, int codeSize, Object[] constPool,
+			FunctionSymbol mainFunctionSymbol, int dataSize)
+			throws AssemblerUnknowInstructionException {
+		this.code = code;
+		this.codeSize = codeSize;
+		this.constPool = constPool;
+		this.mainFunction = mainFunctionSymbol;
+		this.globals = new Object[dataSize];
+
 		StackFrame functionFrame = new StackFrame(mainFunction, -1);
 		calls[++fp] = functionFrame;
 		ip = mainFunction.getAddress();
