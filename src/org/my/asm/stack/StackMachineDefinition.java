@@ -3,7 +3,7 @@ package org.my.asm.stack;
 import org.my.asm.bytecode.BytecodeDefinition;
 import org.my.asm.bytecode.BytecodeInstruction;
 
-public class StackMachineDefinition extends BytecodeDefinition {
+public class StackMachineDefinition implements BytecodeDefinition {
 
 	public static final short INSTR_IADD = 1; // int add
 	public static final short INSTR_ISUB = 2;

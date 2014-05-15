@@ -4,22 +4,21 @@ public class BytecodeInstruction {
 
 	private String name;
 	private int[] type = new int[3];
-	private int n = 0;
+	private int operandCount = 0;
 
-	
 	public BytecodeInstruction(String name) {
 		this(name, 0, 0, 0);
-		n = 0;
+		operandCount = 0;
 	}
 
 	public BytecodeInstruction(String name, int op1) {
 		this(name, op1, 0, 0);
-		n = 1;
+		operandCount = 1;
 	}
 
 	public BytecodeInstruction(String name, int op1, int op2) {
 		this(name, op1, op2, 0);
-		n = 2;
+		operandCount = 2;
 	}
 
 	public BytecodeInstruction(String name, int op1, int op2, int op3) {
@@ -36,6 +35,17 @@ public class BytecodeInstruction {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public int getOperandCount() {
+		return operandCount;
+	}
+
+	public void setOperandCount(int operandCount) {
+		this.operandCount = operandCount;
+	}
+
+	public int getOperandType(int index) {
+		return type[index];
+	}
+
 }
