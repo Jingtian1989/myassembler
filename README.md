@@ -1,7 +1,8 @@
 #	myassembler
 
-Assembler is a demonstration in book TPDSL, it's a generic bytecode assembler whose instructions take 0..3 operands.
-I rewritten it in my own coding style and implement a stackmachine executing the bytecode.
+assembler is a demonstration in book TPDSL, it's a generic bytecode assembler 
+whose instructions take 0..3 operands.I rewritten it in my own coding style and 
+implement a stackmachine executing the bytecode.
 
 
 ###	Demonstration
