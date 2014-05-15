@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.my.asm.lex.Tag;
 import org.my.asm.lex.Token;
 import org.my.asm.lex.AssemblerLexer;
@@ -182,4 +181,23 @@ public class BytecodeAssembler extends AssemblerParser {
 		bytes[address + 3] = (byte) (value & 0xFF);
 	}
 
+	public byte[] getMachineCode() {
+		return code;
+	}
+
+	public int getCodeMemorySize() {
+		return ip;
+	}
+
+	public Object[] getConstantPool() {
+		return constPool.toArray();
+	}
+
+	public FunctionSymbol getMainFunction() {
+		return mainFunctionSymbol;
+	}
+
+	public int getDataSize() {
+		return dataSize;
+	}
 }
